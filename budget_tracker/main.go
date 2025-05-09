@@ -40,19 +40,28 @@ func addExp(db *sql.DB, expense int, expenseName string) {
 	fmt.Printf("New budget: %d\n", budget)
 }
 
-func allExp() {
+func allExp(db *sql.DB) {
 	fmt.Println("Viewing expenses...")
 	// Code to view expenses
-	if len(expenses) == 0 {
-		fmt.Println("No expenses recorded.")
+	rows, err := db.Query("SELECT amount,name FROM expense")
+	if err != nil {
+		fmt.Println("Error retrieving expenses:", err)
 		return
 	}
+	defer rows.Close()
+
 	fmt.Println("Expenses:")
-	for i, expense := range expenses {
-		fmt.Printf("%d: %d\n", i+1, expense)
+	for rows.Next() {
+		var id, amount int
+		var name string
+		err := rows.Scan(&id, &amount, &name)
+		if err != nil {
+			fmt.Println("Error scanning row:", err)
+			return
+		}
+		fmt.Printf("ID: %d, Amount: %d, Name: %s\n", id, amount, name)
 	}
 }
-
 func viewExp() {
 	// Code to view expenses
 	fmt.Printf("Current budget: %d\n", budget)
@@ -106,7 +115,7 @@ func main() {
 			viewExp()
 		case 4:
 			fmt.Println("Viewing all expenses...")
-			allExp()
+			allExp(db)
 		case 5:
 			fmt.Println("Exiting the program...")
 			return

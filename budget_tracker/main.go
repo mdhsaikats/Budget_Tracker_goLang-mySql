@@ -7,8 +7,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var budget int     // Global variable to track the budget
-var expenses []int // Slice to store expenses
+var budget int
+var expenses []int
 
 func AddIncome(db *sql.DB, income int) {
 	fmt.Println("Adding an income...")

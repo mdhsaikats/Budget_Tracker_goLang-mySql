@@ -43,7 +43,7 @@ func addExp(db *sql.DB, expense int, expenseName string) {
 func allExp(db *sql.DB) {
 	fmt.Println("Viewing expenses...")
 	// Code to view expenses
-	rows, err := db.Query("SELECT amount,name FROM expense")
+	rows, err := db.Query("SELECT id,amount,name FROM expense")
 	if err != nil {
 		fmt.Println("Error retrieving expenses:", err)
 		return
@@ -62,6 +62,7 @@ func allExp(db *sql.DB) {
 		fmt.Printf("ID: %d, Amount: %d, Name: %s\n", id, amount, name)
 	}
 }
+
 func viewExp() {
 	// Code to view expenses
 	fmt.Printf("Current budget: %d\n", budget)

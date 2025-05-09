@@ -66,6 +66,7 @@ func allExp(db *sql.DB) {
 func viewExp() {
 	// Code to view expenses
 	fmt.Printf("Current budget: %d\n", budget)
+
 	if budget == 0 {
 		fmt.Println("Insufficient budget.")
 	} else if budget <= 100 {
@@ -73,9 +74,16 @@ func viewExp() {
 	}
 }
 
-func resetBudget() {
+func resetBudget(db *sql.DB) {
 	fmt.Println("Resetting budget...")
-	// Code to reset the budget
+	_, err := db.Exec("DELETE FROM income")
+	if err != nil {
+		fmt.Println("Error clearing income:", err)
+	}
+	_, err = db.Exec("DELETE FROM expense")
+	if err != nil {
+		fmt.Println("Error clearing expenses:", err)
+	}
 	budget = 0
 	expenses = []int{}
 	fmt.Println("Budget reset successfully.")
@@ -92,7 +100,7 @@ func main() {
 	defer db.Close() // Ensure the database connection is closed when the program ends
 	fmt.Println("Welcome to the Budget Tracker!")
 	for {
-		fmt.Printf("Please select an option:\n1. Add Income \n2. Add Expense \n3. View Expenses \n4. View All Exp\n5. Exit program\n")
+		fmt.Printf("Please select an option:\n1. Add Income \n2. Add Expense \n3. View Expenses \n4. View All Exp\n5. Exit program\n6. Reset Budget\n")
 		option := 0
 		fmt.Scan(&option)
 		switch option {
@@ -110,7 +118,6 @@ func main() {
 			fmt.Println("Enter your expense:")
 			fmt.Scan(&expense)
 			addExp(db, expense, expenseName)
-
 		case 3:
 			fmt.Println("Viewing budget...")
 			viewExp()
@@ -121,7 +128,7 @@ func main() {
 			fmt.Println("Exiting the program...")
 			return
 		case 6:
-			resetBudget()
+			resetBudget(db)
 		default:
 			fmt.Println("Invalid option. Please try again.")
 		}

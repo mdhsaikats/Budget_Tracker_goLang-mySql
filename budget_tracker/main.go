@@ -48,6 +48,14 @@ func viewExp() {
 	}
 }
 
+func resetBudget() {
+	fmt.Println("Resetting budget...")
+	// Code to reset the budget
+	budget = 0
+	expenses = []int{}
+	fmt.Println("Budget reset successfully.")
+}
+
 func main() {
 	var income int
 	fmt.Println("Welcome to the Budget Tracker!")
@@ -76,7 +84,8 @@ func main() {
 		case 5:
 			fmt.Println("Exiting the program...")
 			return
-
+		case 6:
+			resetBudget()
 		default:
 			fmt.Println("Invalid option. Please try again.")
 		}

@@ -36,13 +36,14 @@ func allExp() {
 	}
 	fmt.Println("Expenses:")
 	for i, expense := range expenses {
-		fmt.Printf("%d. %d\n", i+1, expense)
+		fmt.Printf("%d: %d\n", i+1, expense)
 	}
 }
+
 func viewExp() {
 	// Code to view expenses
 	fmt.Printf("Current budget: %d\n", budget)
-	if budget <= 50 {
+	if budget <= 100 {
 		fmt.Println("Warning: Your budget is running low!")
 	}
 }
@@ -69,12 +70,13 @@ func main() {
 		case 3:
 			fmt.Println("Viewing budget...")
 			viewExp()
-		case 5:
-			fmt.Println("Exiting the program...")
-			return
 		case 4:
 			fmt.Println("Viewing all expenses...")
 			allExp()
+		case 5:
+			fmt.Println("Exiting the program...")
+			return
+
 		default:
 			fmt.Println("Invalid option. Please try again.")
 		}

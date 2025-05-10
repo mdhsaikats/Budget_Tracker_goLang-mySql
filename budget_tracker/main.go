@@ -103,8 +103,8 @@ func signIn(db *sql.DB, username, password string) {
 	mainSec(db)
 }
 
-func register(db *sql.DB, username, password string) {
-	_, err := db.Exec("INSERT INTO auth (username, password) VALUES (?, ?)", username, password)
+func register(db *sql.DB, username, password, user, mail string) {
+	_, err := db.Exec("INSERT INTO auth (username, password, user,mail) VALUES (?, ?,?,?)", username, password, user, mail)
 	if err != nil {
 		fmt.Println("Error registering user:", err)
 		return
@@ -170,14 +170,19 @@ func main() {
 			fmt.Scanln(&username)
 			fmt.Print("Enter password: ")
 			fmt.Scanln(&password)
+
 			signIn(db, username, password)
 		case "r":
-			var username, password string
+			var username, password, user, mail string
 			fmt.Println("Enter new username:")
 			fmt.Scanln(&username)
 			fmt.Println("Enter new password:")
 			fmt.Scanln(&password)
-			register(db, username, password)
+			fmt.Println("Enter your name:")
+			fmt.Scanln(&user)
+			fmt.Println("Enter your mail:")
+			fmt.Scanln(&mail)
+			register(db, username, password, user, mail)
 		case "exit":
 			fmt.Println("Exiting the program...")
 			return

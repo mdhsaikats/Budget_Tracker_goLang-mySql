@@ -10,9 +10,9 @@ import (
 var budget int
 var expenses []int
 
-func AddIncome(db *sql.DB, income int) {
+func AddIncome(db *sql.DB, userID, income int) {
 	fmt.Println("Adding an income...")
-	_, err := db.Exec("INSERT INTO income (amount) VALUES (?)", income)
+	_, err := db.Exec("INSERT INTO income (user_id, amount) VALUES (?,?)", userID, income)
 	if err != nil {
 		fmt.Println("Error adding income:", err)
 		return
@@ -22,10 +22,10 @@ func AddIncome(db *sql.DB, income int) {
 	fmt.Printf("New budget: %d\n", budget)
 }
 
-func addExp(db *sql.DB, expense int, expenseName string) {
+func addExp(db *sql.DB, userID, expense int, expenseName string) {
 	fmt.Println("Adding an expense...")
 	// Code to add an expense
-	_, err := db.Exec("INSERT INTO expense (amount , name) VALUES (?,?)", expense, expenseName)
+	_, err := db.Exec("INSERT INTO expense (user_id, amount , name) VALUES (?,?,?)", userID, expense, expenseName)
 	if err != nil {
 		fmt.Println("Error adding expense:", err)
 		return
@@ -40,10 +40,10 @@ func addExp(db *sql.DB, expense int, expenseName string) {
 	fmt.Printf("New budget: %d\n", budget)
 }
 
-func allExp(db *sql.DB) {
+func allExp(db *sql.DB, userID int) {
 	fmt.Println("Viewing expenses...")
 	// Code to view expenses
-	rows, err := db.Query("SELECT id,amount,name FROM expense")
+	rows, err := db.Query("SELECT id,amount,name FROM expense where user_id = ?", userID)
 	if err != nil {
 		fmt.Println("Error retrieving expenses:", err)
 		return
@@ -73,22 +73,25 @@ func viewExp() {
 	}
 }
 
-func resetBudget(db *sql.DB) {
+func resetBudget(db *sql.DB, userID int) {
 	fmt.Println("Resetting budget...")
-	_, err := db.Exec("DELETE FROM income")
+
+	_, err := db.Exec("DELETE FROM income WHERE user_id = ?", userID)
 	if err != nil {
-		fmt.Println("Error clearing income:", err)
+		fmt.Println("Error clearing user income:", err)
 	}
-	_, err = db.Exec("DELETE FROM expense")
+
+	_, err = db.Exec("DELETE FROM expense WHERE user_id = ?", userID)
 	if err != nil {
-		fmt.Println("Error clearing expenses:", err)
+		fmt.Println("Error clearing user expenses:", err)
 	}
+
 	budget = 0
 	expenses = []int{}
 	fmt.Println("Budget reset successfully.")
 }
 
-func signIn(db *sql.DB, username, password string) {
+func signIn(db *sql.DB, username, password string) int {
 	var id int
 	err := db.QueryRow("SELECT id FROM auth WHERE username = ? AND password = ?", username, password).Scan(&id)
 	if err != nil {
@@ -97,10 +100,11 @@ func signIn(db *sql.DB, username, password string) {
 		} else {
 			fmt.Println("Error signing in:", err)
 		}
-		return
+		return -1
 	}
 	fmt.Println("Sign in successful!")
-	mainSec(db)
+	return id
+
 }
 
 func register(db *sql.DB, username, password, user, mail string) {
@@ -112,7 +116,7 @@ func register(db *sql.DB, username, password, user, mail string) {
 	fmt.Println("Registration successful! You can now sign in.")
 }
 
-func mainSec(db *sql.DB) {
+func mainSec(db *sql.DB, userID int) {
 	for {
 		var income int
 		fmt.Printf("Please select an option:\n1. Add Income \n2. Add Expense \n3. View Expenses \n4. View All Exp\n5. Exit program\n6. Reset Budget\n")
@@ -122,7 +126,7 @@ func mainSec(db *sql.DB) {
 		case 1:
 			fmt.Println("Enter your income:")
 			fmt.Scan(&income)
-			AddIncome(db, income)
+			AddIncome(db, userID, income)
 		case 2:
 			fmt.Println("Adding an expense...")
 			// Code to add an expense
@@ -132,18 +136,18 @@ func mainSec(db *sql.DB) {
 			fmt.Scan(&expenseName)
 			fmt.Println("Enter your expense:")
 			fmt.Scan(&expense)
-			addExp(db, expense, expenseName)
+			addExp(db, userID, expense, expenseName)
 		case 3:
 			fmt.Println("Viewing budget...")
 			viewExp()
 		case 4:
 			fmt.Println("Viewing all expenses...")
-			allExp(db)
+			allExp(db, userID)
 		case 5:
 			fmt.Println("Exiting the program...")
 			return
 		case 6:
-			resetBudget(db)
+			resetBudget(db, userID)
 		default:
 			fmt.Println("Invalid option. Please try again.")
 		}
@@ -170,6 +174,10 @@ func main() {
 			fmt.Scanln(&username)
 			fmt.Print("Enter password: ")
 			fmt.Scanln(&password)
+			userID := signIn(db, username, password)
+			if userID != -1 {
+				mainSec(db, userID)
+			}
 
 			signIn(db, username, password)
 		case "r":

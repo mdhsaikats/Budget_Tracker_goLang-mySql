@@ -66,7 +66,6 @@ func allExp(db *sql.DB) {
 func viewExp() {
 	// Code to view expenses
 	fmt.Printf("Current budget: %d\n", budget)
-
 	if budget == 0 {
 		fmt.Println("Insufficient budget.")
 	} else if budget <= 100 {
@@ -90,45 +89,32 @@ func resetBudget(db *sql.DB) {
 }
 
 func signIn(db *sql.DB, username, password string) {
-	fmt.Println("Please enter your username:")
-	fmt.Scan(&username)
-	fmt.Println("Please enter your password:")
-	fmt.Scan(&password)
-}
-
-func main() {
-	var income int
-	dsn := "root:@tcp(127.0.0.1:3306)/budget_tracker_db" // Data Source Name for MySQL
-	db, err := sql.Open("mysql", dsn)                    // Open a connection to the database
+	var id int
+	err := db.QueryRow("SELECT id FROM auth WHERE username = ? AND password = ?", username, password).Scan(&id)
 	if err != nil {
-		fmt.Println("Error connecting to the database:", err)
+		if err == sql.ErrNoRows {
+			fmt.Println("Invalid username or password.")
+		} else {
+			fmt.Println("Error signing in:", err)
+		}
 		return
 	}
-	defer db.Close() // Ensure the database connection is closed when the program ends
-	fmt.Println("Welcome to the Budget Tracker!")
+	fmt.Println("Sign in successful!")
+	mainSec(db)
+}
 
-	var choose int
-	fmt.Println("Signing in or register")
-	fmt.Println("Choose s for Sign Up r for Registration:")
-	switch choose {
-	case 's':
-		if choose == 's' {
-			fmt.Println("1. Sign in")
-		} else {
-			fmt.Println("Error: Invalid option")
-			return
-		}
-	case 'r':
-		if choose == 'r' {
-			fmt.Println("2. Register")
-		} else {
-			fmt.Println("Error: Invalid option")
-			return
-		}
-
+func register(db *sql.DB, username, password string) {
+	_, err := db.Exec("INSERT INTO auth (username, password) VALUES (?, ?)", username, password)
+	if err != nil {
+		fmt.Println("Error registering user:", err)
+		return
 	}
+	fmt.Println("Registration successful! You can now sign in.")
+}
 
+func mainSec(db *sql.DB) {
 	for {
+		var income int
 		fmt.Printf("Please select an option:\n1. Add Income \n2. Add Expense \n3. View Expenses \n4. View All Exp\n5. Exit program\n6. Reset Budget\n")
 		option := 0
 		fmt.Scan(&option)
@@ -160,6 +146,41 @@ func main() {
 			resetBudget(db)
 		default:
 			fmt.Println("Invalid option. Please try again.")
+		}
+	}
+}
+func main() {
+	dsn := "root:@tcp(127.0.0.1:3306)/budget_tracker_db" // Data Source Name for MySQL
+	db, err := sql.Open("mysql", dsn)                    // Open a connection to the database
+	if err != nil {
+		fmt.Println("Error connecting to the database:", err)
+		return
+	}
+	defer db.Close() // Ensure the database connection is closed when the program ends
+	fmt.Println("Welcome to the Budget Tracker!")
+	for {
+		var choose string
+		fmt.Println("Signing in or register you can write exit to exit the program")
+		fmt.Println("Choose s for Sign Up r for Registration:")
+		fmt.Scanln(&choose)
+		switch choose {
+		case "s":
+			var username, password string
+			fmt.Print("Enter username: ")
+			fmt.Scanln(&username)
+			fmt.Print("Enter password: ")
+			fmt.Scanln(&password)
+			signIn(db, username, password)
+		case "r":
+			var username, password string
+			fmt.Println("Enter new username:")
+			fmt.Scanln(&username)
+			fmt.Println("Enter new password:")
+			fmt.Scanln(&password)
+			register(db, username, password)
+		case "exit":
+			fmt.Println("Exiting the program...")
+			return
 		}
 	}
 }

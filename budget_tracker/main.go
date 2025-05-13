@@ -75,17 +75,14 @@ func viewExp() {
 
 func resetBudget(db *sql.DB, userID int) {
 	fmt.Println("Resetting budget...")
-
 	_, err := db.Exec("DELETE FROM income WHERE user_id = ?", userID)
 	if err != nil {
 		fmt.Println("Error clearing user income:", err)
 	}
-
 	_, err = db.Exec("DELETE FROM expense WHERE user_id = ?", userID)
 	if err != nil {
 		fmt.Println("Error clearing user expenses:", err)
 	}
-
 	budget = 0
 	expenses = []int{}
 	fmt.Println("Budget reset successfully.")
@@ -104,7 +101,6 @@ func signIn(db *sql.DB, username, password string) int {
 	}
 	fmt.Println("Sign in successful!")
 	return id
-
 }
 
 func register(db *sql.DB, username, password, user, mail string) {
@@ -178,7 +174,6 @@ func main() {
 			if userID != -1 {
 				mainSec(db, userID)
 			}
-
 			signIn(db, username, password)
 		case "r":
 			var username, password, user, mail string

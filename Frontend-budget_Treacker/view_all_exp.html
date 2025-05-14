@@ -12,37 +12,19 @@
         <ul id="expenseList">[Expenses will be listed here]</ul>
     </div>
     <script>
-window.onload = function() {
-    const userId = localStorage.getItem("user_id");
+        window.addEventListener("DOMContentLoaded", async () => {
+    const res = await fetch("http://localhost:8080/all_expenses");
+    const expenses = await res.json();
+    const list = document.getElementById("expenseList");
+    list.innerHTML = "";
 
-    if (!userId) {
-        alert("You must be logged in.");
-        window.location.href = "index.html"; // Redirect to login page if not logged in
-        return;
-    }
-
-    fetch(`http://localhost:8080/all_expenses`, {
-        method: "GET"
-    })
-    .then(response => response.json())
-    .then(expenses => {
-        if (expenses.length === 0) {
-            document.getElementById("expenseList").innerHTML = "<li>No expenses recorded yet.</li>";
-            return;
-        }
-
-        const expenseList = document.getElementById("expenseList");
-        expenses.forEach(expense => {
-            const expenseItem = document.createElement("li");
-            expenseItem.textContent = `${expense.name}: $${expense.amount}`;
-            expenseList.appendChild(expenseItem);
-        });
-    })
-    .catch(error => {
-        console.error("Error fetching expenses:", error);
-        alert("❌ Error fetching expenses");
+    expenses.forEach(exp => {
+        const li = document.createElement("li");
+        li.textContent = `${exp.name}: ₹${exp.amount}`;
+        list.appendChild(li);
     });
-};
+});
+
 </script>
 
 </body>

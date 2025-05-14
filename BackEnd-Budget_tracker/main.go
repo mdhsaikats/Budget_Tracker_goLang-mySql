@@ -38,6 +38,10 @@ type Expense struct {
 }
 
 func registerUser(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	if r.Method != "POST" {
 		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed) //error
 		return
@@ -55,6 +59,10 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func signIn(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	if r.Method != "POST" {
 		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed) //error
 		return
@@ -71,6 +79,9 @@ func signIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func addIncome(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	if r.Method != "POST" {
 		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed) //error
 		return
@@ -93,6 +104,10 @@ func addIncome(w http.ResponseWriter, r *http.Request) {
 }
 
 func addExpense(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	if r.Method != "POST" {
 		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed) //error
 		return
@@ -111,6 +126,10 @@ func addExpense(w http.ResponseWriter, r *http.Request) {
 }
 
 func allExpences(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	if r.Method != "GET" {
 		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed) //error
 		return
@@ -138,6 +157,10 @@ func allExpences(w http.ResponseWriter, r *http.Request) {
 }
 
 func getBudget(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	if r.Method != "GET" {
 		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed) //error
 		return
@@ -146,6 +169,10 @@ func getBudget(w http.ResponseWriter, r *http.Request) {
 }
 
 func resetBudget(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	if r.Method != http.MethodPost {
 		http.Error(w, "Only POST allowed", http.StatusMethodNotAllowed)
 		return

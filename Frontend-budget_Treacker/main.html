@@ -17,5 +17,27 @@
       <li><a href="reset_budget.html">Reset Budget</a></li>
     </ul>
   </div>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const userId = localStorage.getItem("user_id");
+
+    if (!userId) {
+        alert("You must be logged in.");
+        window.location.href = "index.html"; // redirect to login
+    }
+
+    // Optional: Add a logout button dynamically
+    const container = document.querySelector(".mainpage-container");
+    const logoutBtn = document.createElement("button");
+    logoutBtn.textContent = "Logout";
+    logoutBtn.style.marginTop = "20px";
+    logoutBtn.onclick = () => {
+        localStorage.removeItem("user_id");
+        window.location.href = "index.html";
+    };
+    container.appendChild(logoutBtn);
+});
+</script>
+
 </body>
 </html>

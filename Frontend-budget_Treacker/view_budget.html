@@ -11,5 +11,41 @@
         <h2>Budget Summary</h2>
         <div id="budgetDetails">[Waiting for Backend to renponse]</div>
     </div>
+    <script>
+window.onload = function() {
+    const userId = localStorage.getItem("user_id");
+
+    if (!userId) {
+        alert("You must be logged in.");
+        window.location.href = "index.html"; // Redirect to login page if not logged in
+        return;
+    }
+
+    fetch("http://localhost:8080/budget", {
+        method: "GET"
+    })
+    .then(response => response.json())
+    .then(budget => {
+        if (!budget || Object.keys(budget).length === 0) {
+            document.getElementById("budgetDetails").innerHTML = "No budget data available.";
+            return;
+        }
+
+        let budgetInfo = `
+            <ul>
+                <li><strong>Income:</strong> $${budget.income || 0}</li>
+                <li><strong>Expense:</strong> $${budget.expense || 0}</li>
+            </ul>
+        `;
+
+        document.getElementById("budgetDetails").innerHTML = budgetInfo;
+    })
+    .catch(error => {
+        console.error("Error fetching budget:", error);
+        alert("❌ Error fetching budget data");
+    });
+};
+</script>
+
 </body>
 </html>

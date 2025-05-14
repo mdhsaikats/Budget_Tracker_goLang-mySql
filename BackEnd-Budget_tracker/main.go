@@ -1,7 +1,10 @@
 package main
 
-func main() {
-	connection := db.Connect()
-	defer connection.Close()
+import (
+	"database/sql"
 
-}
+	_ "github.com/go-sql-driver/mysql"
+)
+
+var db *sql.DB
+var budget = make(map[string]int)

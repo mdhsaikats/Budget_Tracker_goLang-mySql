@@ -10,6 +10,12 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+func enableCORS(w http.ResponseWriter) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+}
+
 var db *sql.DB
 var budget = make(map[string]int)
 
@@ -38,8 +44,14 @@ type Expense struct {
 }
 
 func registerUser(w http.ResponseWriter, r *http.Request) {
+	enableCORS(w)
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
 	if r.Method != "POST" {
-		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed) //error
+		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -47,7 +59,7 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&user)
 	_, err := db.Exec("INSERT INTO users (username, password, name, email) VALUES (?, ?, ?, ?)", user.Username, user.Password, user.Name, user.Email)
 	if err != nil {
-		http.Error(w, "Error Registraing User", http.StatusInternalServerError)
+		http.Error(w, "Error Registering User", http.StatusInternalServerError)
 		return
 	}
 
@@ -55,19 +67,34 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func signIn(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed) //error
+	enableCORS(w)
+
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
 		return
 	}
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	var auth Auth
-	json.NewDecoder(r.Body).Decode(&auth)
+	if err := json.NewDecoder(r.Body).Decode(&auth); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println("Received login:", auth.Username, auth.Password) // Debug
+
 	var userID int
 	err := db.QueryRow("SELECT id FROM users WHERE username = ? AND password = ?", auth.Username, auth.Password).Scan(&userID)
 	if err != nil {
 		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
 		return
 	}
-	json.NewEncoder(w).Encode(map[string]int{"user_id": userID}) // Return user ID as JSON
+
+	json.NewEncoder(w).Encode(map[string]int{"user_id": userID})
 }
 
 func addIncome(w http.ResponseWriter, r *http.Request) {

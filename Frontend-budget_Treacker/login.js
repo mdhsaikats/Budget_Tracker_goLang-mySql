@@ -12,32 +12,30 @@ document.addEventListener("DOMContentLoaded", () => {
             const response = await fetch("http://localhost:8080/signin", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    username,
-                    password
-                })
+                body: JSON.stringify({ username, password }),
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                const userId = data.user_id;
-
-                // Save user_id in localStorage for later use
-                localStorage.setItem("user_id", userId);
-
-                // Redirect to dashboard or home page
-                window.location.href = "dashboard.html";
-            } else {
+            if (!response.ok) {
                 const errorText = await response.text();
-                errorMessage.textContent = "Login failed: " + errorText;
-                errorMessage.style.color = "red";
+                errorMessage.textContent = errorText || "Login failed.";
+                return;
             }
-        } catch (error) {
-            console.error("Error during login:", error);
-            errorMessage.textContent = "Something went wrong. Please try again.";
-            errorMessage.style.color = "red";
+
+            const data = await response.json();
+            console.log("Login successful. User ID:", data.user_id);
+
+            // Optionally store user_id in localStorage or sessionStorage
+            localStorage.setItem("user_id", data.user_id);
+
+            // ✅ Redirect to main page (e.g., dashboard.html)
+            window.location.href = "main.html";
+
+        } catch (err) {
+            errorMessage.textContent = "Error: " + err.message;
         }
     });
 });
+
+

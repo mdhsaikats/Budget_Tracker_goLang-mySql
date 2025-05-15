@@ -1,13 +1,35 @@
 document.querySelector("form").addEventListener("submit", async function (e) {
     e.preventDefault();
-    const income = document.getElementById("income").value;
+
+    const income = document.getElementById("income").value.trim();
     const user_id = localStorage.getItem("user_id");
 
-    await fetch("http://localhost:8080/add_income", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: parseInt(user_id), amount: parseInt(income) })
-    });
+    if (!user_id) {
+        alert("User not logged in. Please log in first.");
+        window.location.href = "index.html"; // redirect to login page
+        return;
+    }
 
-    alert("Income added.");
+    if (!income || isNaN(income) || parseInt(income) <= 0) {
+        alert("Please enter a valid income amount.");
+        return;
+    }
+
+    try {
+        const res = await fetch("http://localhost:8080/add_income", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id: parseInt(user_id), amount: parseInt(income) })
+        });
+
+        if (res.ok) {
+            alert("Income added successfully.");
+            document.getElementById("income").value = ""; // reset the input
+        } else {
+            const err = await res.text();
+            alert("Failed to add income: " + err);
+        }
+    } catch (error) {
+        alert("Network error: " + error.message);
+    }
 });

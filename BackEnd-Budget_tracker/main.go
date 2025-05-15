@@ -98,61 +98,87 @@ func signIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func addIncome(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	enableCORS(w)
 
-	if r.Method != "POST" {
-		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed) //error
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
 		return
 	}
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "405 Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	var income Income
-	err := json.NewDecoder(r.Body).Decode(&income)
-	if err != nil {
-		http.Error(w, "Error decoding JSON", http.StatusBadRequest)
+	if err := json.NewDecoder(r.Body).Decode(&income); err != nil {
+		http.Error(w, "Error decoding JSON: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	_, err = db.Exec("INSERT INTO income (user_id, amount) VALUES (?, ?)", income.UserID, income.Amount)
-	if err != nil {
-		http.Error(w, "Error adding income", http.StatusInternalServerError)
+	if income.UserID == 0 || income.Amount <= 0 {
+		http.Error(w, "Invalid input: user_id and amount must be positive", http.StatusBadRequest)
 		return
 	}
 
+	_, err := db.Exec("INSERT INTO income (user_id, amount) VALUES (?, ?)", income.UserID, income.Amount)
+	if err != nil {
+		http.Error(w, "Error adding income: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Optional: Use a per-user budget map if tracking is needed
 	budget["income"] += income.Amount
-	fmt.Fprintln(w, "Income added successfully")
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"message": "Income added successfully"})
 }
 
 func addExpense(w http.ResponseWriter, r *http.Request) {
+	enableCORS(w)
 
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	if r.Method != "POST" {
-		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed) //error
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
 		return
 	}
-	var expense Expense
-	json.NewDecoder(r.Body).Decode(&expense)
 
-	_, err := db.Exec("INSERT INTO expenses (user_id, amount, name) VALUES (?, ?, ?)", expense.UserID, expense.Amount, expense.Name)
+	if r.Method != http.MethodPost {
+		http.Error(w, "405 Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var expense Expense
+	err := json.NewDecoder(r.Body).Decode(&expense)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	_, err = db.Exec("INSERT INTO expenses (user_id, amount, name) VALUES (?, ?, ?)", expense.UserID, expense.Amount, expense.Name)
 	if err != nil {
 		http.Error(w, "Error adding expense", http.StatusInternalServerError)
 		return
 	}
 
 	budget["expense"] += expense.Amount
+
+	w.WriteHeader(http.StatusOK)
 	fmt.Fprintln(w, "Expense added successfully")
 }
 
 func allExpences(w http.ResponseWriter, r *http.Request) {
+	enableCORS(w)
 
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	if r.Method != "GET" {
-		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed) //error
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
 		return
 	}
+
+	if r.Method != http.MethodGet {
+		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	rows, err := db.Query("SELECT id, user_id, amount, name FROM expenses")
 	if err != nil {
 		http.Error(w, "Error fetching expenses", http.StatusInternalServerError)
@@ -171,45 +197,80 @@ func allExpences(w http.ResponseWriter, r *http.Request) {
 		expenses = append(expenses, expense)
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(expenses)
-
 }
 
 func getBudget(w http.ResponseWriter, r *http.Request) {
+	enableCORS(w)
 
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	if r.Method != "GET" {
-		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed) //error
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
 		return
 	}
-	json.NewEncoder(w).Encode(budget)
+
+	if r.Method != http.MethodGet {
+		http.Error(w, "405 Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Sum total income
+	var totalIncome int
+	err := db.QueryRow("SELECT IFNULL(SUM(amount), 0) FROM income").Scan(&totalIncome)
+	if err != nil {
+		http.Error(w, "Error fetching income: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Sum total expenses
+	var totalExpense int
+	err = db.QueryRow("SELECT IFNULL(SUM(amount), 0) FROM expenses").Scan(&totalExpense)
+	if err != nil {
+		http.Error(w, "Error fetching expenses: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]int{
+		"income":  totalIncome,
+		"expense": totalExpense,
+	})
 }
 
 func resetBudget(w http.ResponseWriter, r *http.Request) {
+	enableCORS(w)
 
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 
 	if r.Method != http.MethodPost {
 		http.Error(w, "Only POST allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	userIDStr := r.URL.Query().Get("user_id")
-	userID, _ := strconv.Atoi(userIDStr)
 
-	_, err := db.Exec("DELETE FROM income WHERE user_id = ?", userID)
+	userIDStr := r.URL.Query().Get("user_id")
+	userID, err := strconv.Atoi(userIDStr)
+	if err != nil || userID <= 0 {
+		http.Error(w, "Invalid or missing user_id", http.StatusBadRequest)
+		return
+	}
+
+	_, err = db.Exec("DELETE FROM income WHERE user_id = ?", userID)
 	if err != nil {
 		http.Error(w, "Error resetting income: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	_, err = db.Exec("DELETE FROM expense WHERE user_id = ?", userID)
+	_, err = db.Exec("DELETE FROM expenses WHERE user_id = ?", userID) // Correct table name here
 	if err != nil {
 		http.Error(w, "Error resetting expenses: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	budget[strconv.Itoa(userID)] = 0
+
+	// If you want to reset budget totals for the user, you may want to track them differently.
+	// For example, if you keep per-user budget summary in a map:
+	delete(budget, strconv.Itoa(userID)) // or reset fields if budget is more complex
+
 	fmt.Fprintln(w, "Budget reset successful.")
 }
 

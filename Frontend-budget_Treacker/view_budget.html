@@ -12,19 +12,26 @@
         <div id="budgetDetails">[Waiting for Backend to renponse]</div>
     </div>
     <script>
-        window.addEventListener("DOMContentLoaded", async () => {
-    const res = await fetch("http://localhost:8080/budget");
-    const data = await res.json();
-    const income = data["income"] || 0;
-    const expense = data["expense"] || 0;
-    const balance = income - expense;
+       window.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const res = await fetch("http://localhost:8080/budget");
+                if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+                const data = await res.json();
 
-    document.getElementById("budgetDetails").innerHTML = `
-        <p>Total Income: ₹${income}</p>
-        <p>Total Expenses: ₹${expense}</p>
-        <p>Remaining Balance: ₹${balance}</p>
-    `;
-});
+                const income = data["income"] || 0;
+                const expense = data["expense"] || 0;
+                const balance = income - expense;
+
+                document.getElementById("budgetDetails").innerHTML = `
+                    <p>Total Income: ₹${income}</p>
+                    <p>Total Expenses: ₹${expense}</p>
+                    <p>Remaining Balance: ₹${balance}</p>
+                `;
+            } catch (err) {
+                document.getElementById("budgetDetails").textContent = "Failed to load budget data.";
+                console.error("Fetch error:", err);
+            }
+        });
 
 </script>
 

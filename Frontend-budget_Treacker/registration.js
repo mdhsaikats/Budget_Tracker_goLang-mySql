@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("registration-form");
 
@@ -36,5 +37,26 @@ document.addEventListener("DOMContentLoaded", () => {
             errorMessage.textContent = "Error: " + error.message;
         }
     });
+=======
+document.getElementById("registration-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const name = document.getElementById("userName").value;
+    const email = document.getElementById("email").value;
+
+    const res = await fetch("http://localhost:8080/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password, name, email })
+    });
+
+    if (res.ok) {
+        alert("Registration successful. Please log in.");
+        window.location.href = "index.html";
+    } else {
+        document.getElementById("error-message").textContent = "Error during registration.";
+    }
+>>>>>>> 926a8ee29f44e136121ae8004131b1d7cae7c7ec
 });
 

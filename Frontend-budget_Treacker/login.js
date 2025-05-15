@@ -23,7 +23,7 @@ document.getElementById("login-form").addEventListener("submit", async function 
                 localStorage.setItem("user_id", userId);
 
                 // Redirect to dashboard or home page
-                window.location.href = "dashboard.html";
+                window.location.href = "main.html";
             } else {
                 const errorText = await response.text();
                 errorMessage.textContent = "Login failed: " + errorText;
@@ -33,8 +33,7 @@ document.getElementById("login-form").addEventListener("submit", async function 
             console.error("Error during login:", error);
             errorMessage.textContent = "Something went wrong. Please try again.";
             errorMessage.style.color = "red";
-        }
-    });
+    }
 });
 
 

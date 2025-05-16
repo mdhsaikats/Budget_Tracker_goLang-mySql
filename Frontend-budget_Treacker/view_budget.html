@@ -23,9 +23,9 @@
                 const balance = income - expense;
 
                 document.getElementById("budgetDetails").innerHTML = `
-                    <p>Total Income: ₹${income}</p>
-                    <p>Total Expenses: ₹${expense}</p>
-                    <p>Remaining Balance: ₹${balance}</p>
+                    <p>Total Income: Tk${income}</p>
+                    <p>Total Expenses: Tk${expense}</p>
+                    <p>Remaining Balance: Tk${balance}</p>
                 `;
             } catch (err) {
                 document.getElementById("budgetDetails").textContent = "Failed to load budget data.";

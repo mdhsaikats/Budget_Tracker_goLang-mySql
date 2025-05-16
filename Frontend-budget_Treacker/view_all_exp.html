@@ -11,21 +11,6 @@
         <h2>All Expenses</h2>
         <ul id="expenseList">[Expenses will be listed here]</ul>
     </div>
-    <script>
-        window.addEventListener("DOMContentLoaded", async () => {
-    const res = await fetch("http://localhost:8080/all_expenses");
-    const expenses = await res.json();
-    const list = document.getElementById("expenseList");
-    list.innerHTML = "";
-
-    expenses.forEach(exp => {
-        const li = document.createElement("li");
-        li.textContent = `${exp.name}: Tk${exp.amount}`;
-        list.appendChild(li);
-    });
-});
-
-</script>
-
+    <script src="view_all_exp.js"></script> <!-- FIXED -->
 </body>
 </html>

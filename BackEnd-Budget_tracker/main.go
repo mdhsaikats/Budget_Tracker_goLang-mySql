@@ -154,6 +154,29 @@ func addExpense(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Fetch total income
+	var totalIncome int
+	err = db.QueryRow("SELECT IFNULL(SUM(amount), 0) FROM income WHERE user_id = ?", expense.UserID).Scan(&totalIncome)
+	if err != nil {
+		http.Error(w, "Error fetching income", http.StatusInternalServerError)
+		return
+	}
+
+	// Fetch total expense
+	var totalExpense int
+	err = db.QueryRow("SELECT IFNULL(SUM(amount), 0) FROM expenses WHERE user_id = ?", expense.UserID).Scan(&totalExpense)
+	if err != nil {
+		http.Error(w, "Error fetching expenses", http.StatusInternalServerError)
+		return
+	}
+
+	// Check if adding this expense exceeds available income
+	if totalExpense+expense.Amount > totalIncome {
+		http.Error(w, "Insufficient balance to add this expense", http.StatusBadRequest)
+		return
+	}
+
+	// Insert expense
 	_, err = db.Exec("INSERT INTO expenses (user_id, amount, name) VALUES (?, ?, ?)", expense.UserID, expense.Amount, expense.Name)
 	if err != nil {
 		http.Error(w, "Error adding expense", http.StatusInternalServerError)
@@ -179,9 +202,18 @@ func allExpences(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rows, err := db.Query("SELECT id, user_id, amount, name FROM expenses")
+	userID := r.Header.Get("X-User-ID")
+	fmt.Println("Received X-User-ID:", userID)
+
+	if userID == "" {
+		http.Error(w, "Missing user ID", http.StatusBadRequest)
+		return
+	}
+
+	rows, err := db.Query("SELECT id, user_id, amount, name FROM expenses WHERE user_id = ?", userID)
 	if err != nil {
 		http.Error(w, "Error fetching expenses", http.StatusInternalServerError)
+		fmt.Println("DB query error:", err)
 		return
 	}
 	defer rows.Close()

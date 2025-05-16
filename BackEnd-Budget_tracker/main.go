@@ -13,7 +13,7 @@ import (
 func enableCORS(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-User-ID")
 }
 
 var db *sql.DB
@@ -203,6 +203,7 @@ func allExpences(w http.ResponseWriter, r *http.Request) {
 
 func getBudget(w http.ResponseWriter, r *http.Request) {
 	enableCORS(w)
+	fmt.Println("Budget endpoint hit") // <-- Add this
 
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
@@ -214,22 +215,34 @@ func getBudget(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Sum total income
+	UserID := r.Header.Get("X-User-ID")
+	fmt.Println("Received X-User-ID header:", UserID) // <-- Add this
+
+	if UserID == "" {
+		http.Error(w, "Missing user ID", http.StatusBadRequest)
+		return
+	}
+
+	// Optional: Try converting to int early and log
 	var totalIncome int
-	err := db.QueryRow("SELECT IFNULL(SUM(amount), 0) FROM income").Scan(&totalIncome)
+	err := db.QueryRow("SELECT IFNULL(SUM(amount), 0) FROM income WHERE user_id = ?", UserID).Scan(&totalIncome)
 	if err != nil {
 		http.Error(w, "Error fetching income: "+err.Error(), http.StatusInternalServerError)
+		fmt.Println("Income query error:", err)
 		return
 	}
 
-	// Sum total expenses
 	var totalExpense int
-	err = db.QueryRow("SELECT IFNULL(SUM(amount), 0) FROM expenses").Scan(&totalExpense)
+	err = db.QueryRow("SELECT IFNULL(SUM(amount), 0) FROM expenses WHERE user_id = ?", UserID).Scan(&totalExpense)
 	if err != nil {
 		http.Error(w, "Error fetching expenses: "+err.Error(), http.StatusInternalServerError)
+		fmt.Println("Expense query error:", err)
 		return
 	}
 
+	fmt.Println("Fetched income/expense:", totalIncome, totalExpense)
+
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]int{
 		"income":  totalIncome,
 		"expense": totalExpense,

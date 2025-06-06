@@ -1,246 +1,269 @@
-/* Set the background on the body */
-body {
-  background-color: #8F87F1; /* Example solid purple — change as needed */
-  min-height: 100vh;
+* {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Login container styled responsively */
-.login-container {
-  background-color: #f1f1f1;
-  padding: 2rem;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-}
-
-/* Form styling */
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-  width: 100%;
-}
-
-a {
-  text-decoration: none;
-}
-
-input[type="text"],
-input[type="password"],
-input[type="email"] {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  border-radius: 10px;
   box-sizing: border-box;
 }
 
-button {
-  padding: 0.6rem;
-  font-size: 1rem;
-  cursor: pointer;
-  background-color: #8F87F1;
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f7f9fc;
+  color: #2d3436;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
   color: white;
-  border: none;
-  border-radius: 10px;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  box-shadow: 3px 0 15px rgba(0, 0, 0, 0.05);
 }
 
-button:hover {
-  background-color: #726ac5;
-}
-
-/* for registration form */
-.registration-container {
-  background-color: #f1f1f1;
-  padding: 2rem;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-}
-
-
-/* main page */
-
-/* Main Menu Container */
-.mainpage-container {
-  background-color: #f1f1f1;
-  padding: 2rem;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 450px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+.sidebar h2 {
+  font-size: 1.8rem;
   text-align: center;
 }
 
-/* Main Menu Heading */
-.mainpage-container h1 {
+.sidebar nav a {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+  gap: 10px;
+  padding: 0.75rem 1rem;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff; /* optional: keeps text color white on hover */
+}
+
+
+/* Main Content */
+.main {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.topbar h1 {
+  font-size: 2rem;
+}
+
+.topbar button {
+  background: #00cec9;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.topbar button:hover {
+  background: #00b894;
+}
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+  color: white;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+}
+
+.card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.card p {
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+/* Card themes */
+.card.income {
+  background: linear-gradient(135deg, #00b894, #55efc4);
+}
+.card.expense {
+  background: linear-gradient(135deg, #d63031, #ff7675);
+}
+.card.balance {
+  background: linear-gradient(135deg, #0984e3, #74b9ff);
+}
+
+
+/*icon*/
+
+.icon {
+  width: 50px;
+  height: 50px;
+  padding: 6px;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  object-fit: contain;
+}
+
+/*addIncome*/
+
+.addpage {
+  background-color: #6c5ce7;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 1100px;
+  max-height: 1200px;
+  margin: 80px auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  color: #fff;
+  animation: fadeInUp 0.6s ease;
+}
+
+.addpage h2 {
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: #ffffff;
 }
 
-/* Menu List */
-.mainpage-container ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-/* Individual List Item */
-.mainpage-container ul li {
-  margin: 0.7rem 0;
-}
-
-/* Menu Links */
-.mainpage-container ul li a {
-  display: block;
-  background-color: #8F87F1;
-  color: white;
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
-  text-decoration: none;
-  font-size: 1.1rem;
-  font-weight: bold;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-/* Hover Effect */
-.mainpage-container ul li a:hover {
-  background-color: #726ac5;
-  transform: scale(1.02);
-}
-
-
-/* add option */
-
-/* Add Page Container */
-.addpage {
-  background-color: #f1f1f1;
-  padding: 2rem;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 400px;
-  margin: 0 auto;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  text-align: center;
-}
-
-/* Heading */
-.addpage h2 {
-  margin-bottom: 1.5rem;
-  color: #333;
-  font-size: 1.8rem;
-}
-
-/* Form Styling */
 .addpage form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-/* Label Styling */
 .addpage label {
   font-size: 1rem;
-  color: #444;
+  color: #f0f0f0;
   text-align: left;
 }
 
-/* Input Field */
 .addpage input[type="number"] {
-  padding: 0.6rem;
-  border: 1px solid #ccc;
+  padding: 0.75rem;
+  border: none;
   border-radius: 10px;
   font-size: 1rem;
-  box-sizing: border-box;
-  width: 100%;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  outline: none;
+  transition: box-shadow 0.3s ease;
 }
 
-/* Button Styling */
+.addpage input[type="number"]:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
+}
+
 .addpage button {
-  padding: 0.7rem;
+  padding: 0.75rem;
   font-size: 1rem;
   font-weight: bold;
-  background-color: #8F87F1;
-  color: white;
+  background-color: #ffffff;
+  color: #66a6ff;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .addpage button:hover {
-  background-color: #726ac5;
-  transform: scale(1.02);
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
 }
 
-/* add expences */
+/* Optional entrance animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-/* Add Expense Page Container */
 .addexpense {
-  background-color: #f1f1f1;
-  padding: 2rem;
-  border-radius: 15px;
+  background: linear-gradient(135deg, #b185db 0%, #5b3baf 100%);
+  padding: 2.5rem;
+  border-radius: 20px;
   width: 90%;
-  max-width: 400px;
-  margin: 0 auto;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  max-width: 450px;
+  margin: 80px auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   text-align: center;
+  color: #fff;
+  animation: fadeInUp 0.5s ease-in-out;
 }
 
-/* Heading */
 .addexpense h2 {
   margin-bottom: 1.5rem;
-  color: #333;
-  font-size: 1.8rem;
+  font-size: 2rem;
+  color: #ffffff;
+  letter-spacing: 1px;
 }
 
-/* Form Styling */
 .addexpense form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
-/* Label Styling */
 .addexpense label {
   font-size: 1rem;
-  color: #444;
+  color: #f3e9ff;
   text-align: left;
 }
 
-/* Input Fields */
 .addexpense input[type="text"],
 .addexpense input[type="number"] {
-  padding: 0.6rem;
-  border: 1px solid #ccc;
+  padding: 0.7rem;
+  border: none;
   border-radius: 10px;
   font-size: 1rem;
   width: 100%;
   box-sizing: border-box;
+  background-color: #f3f0fa;
+  color: #333;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
-/* Button Styling */
 .addexpense button {
-  padding: 0.7rem;
+  padding: 0.8rem;
   font-size: 1rem;
   font-weight: bold;
-  background-color: #8F87F1;
-  color: white;
+  background-color: #ffffff;
+  color: #5b3baf;
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -248,114 +271,258 @@ button:hover {
 }
 
 .addexpense button:hover {
-  background-color: #726ac5;
-  transform: scale(1.02);
+  background-color: #e7d8ff;
+  transform: scale(1.03);
 }
 
-/*for budget page*/
-
-/* Budget Summary Section */
-.budget {
-  background-color: #f1f1f1;
-  padding: 2rem;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 500px;
-  margin: 0 auto;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  text-align: center;
-}
-
-/* Heading */
-.budget h2 {
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
-  color: #333;
-}
-
-/* Budget Details Container */
-#budgetDetails {
-  background-color: #fff;
-  padding: 1rem;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  font-size: 1rem;
-  color: #444;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-/*expences list page*/
-/* All Expenses Section */
+/*viwwExpense*/
 .showexp {
-  background-color: #f1f1f1;
-  padding: 2rem;
-  border-radius: 15px;
+  background: linear-gradient(135deg, #c471ed 0%, #f64f59 100%);
+  padding: 2.5rem;
+  border-radius: 20px;
   width: 90%;
-  max-width: 500px;
-  margin: 0 auto;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  max-width: 600px;
+  margin: 80px auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  animation: fadeInUp 0.5s ease-in-out;
 }
 
-/* Heading */
 .showexp h2 {
+  font-size: 2rem;
   margin-bottom: 1.5rem;
-  font-size: 1.8rem;
-  color: #333;
+  text-align: center;
+  letter-spacing: 1px;
 }
 
-/* Expense List */
 #expenseList {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
-  text-align: left;
+  margin: 0;
 }
 
-/* Expense Items */
 #expenseList li {
-  background-color: #fff;
-  margin-bottom: 0.75rem;
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  font-size: 1rem;
-  color: #444;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  color: #fff;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+#expenseList li:hover {
+  transform: translateY(-3px);
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 /*reset*/
-
 .reset {
-    background-color: #f1f1f1;  /* Background color */
-    color: #333;  /* Text color */
-    padding: 20px;  /* Padding for spacing */
-    border-radius: 8px;  /* Rounded corners */
-    text-align: center;  /* Center the text */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  padding: 2.5rem;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  margin: 80px auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  color: #3a3a3a;
+  text-align: center;
+  animation: fadeInUp 0.5s ease-in-out;
 }
 
 .reset h2 {
-    font-size: 24px;  /* Larger font size for the heading */
-    margin-bottom: 10px;  /* Space below the heading */
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #721c24;
 }
 
 .reset p {
-    font-size: 16px;  /* Text size for the description */
-    margin-bottom: 20px;  /* Space below the paragraph */
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: #5a1a1a;
 }
 
 .reset button {
-    background-color: #fff;  /* White button background */
-    color: #8F87F1;  /* Text color matches the background */
-    border: 2px solid #8F87F1;  /* Border color matches the background */
-    padding: 10px 20px;  /* Button padding */
-    font-size: 16px;  /* Button text size */
-    cursor: pointer;  /* Pointer cursor on hover */
-    border-radius: 5px;  /* Rounded button corners */
-    transition: background-color 0.3s, color 0.3s;  /* Smooth hover effect */
+  background-color: #ff4d4d;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .reset button:hover {
-    background-color: #8F87F1;  /* Button background on hover */
-    color: white;  /* Text color changes to white */
+  background-color: #e60000;
+  transform: scale(1.05);
 }
+
+
+
+/* Container Styling */
+.registration-container {
+    margin-left: 500px;
+    margin-top: 75px;
+    background: white;
+    padding: 30px 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Form Heading */
+#registration-form h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #5e4b8b;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels */
+.form-group label {
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+/* Inputs */
+.form-group input {
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #7b5ce0;
+}
+
+/* Button */
+.form-group button {
+    background: #7b5ce0;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.form-group button:hover {
+    background: #6545c6;
+}
+
+/* Link */
+.form-group a {
+    color: #7b5ce0;
+    text-decoration: none;
+}
+
+.form-group a:hover {
+    text-decoration: underline;
+}
+
+/* Error Message */
+#error-message {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+}
+
+
+
+/* Login form container */
+.login-container {
+    margin-left: 500px;
+    margin-top: 75px;
+    background: #ffffff;
+    padding: 30px 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Heading */
+#login-form h1 {
+    text-align: center;
+    color: #8228d9;
+    margin-bottom: 25px;
+}
+
+/* Form group spacing */
+.form-group {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels */
+.form-group label {
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+/* Inputs */
+.form-group input {
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: 0.3s border;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #a04bd4;
+}
+
+/* Login button */
+.form-group button {
+    background: #a04bd4;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s background;
+}
+
+.form-group button:hover {
+    background: #8429be;
+}
+
+/* Link styling */
+.form-group a {
+    color: #a04bd4;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.form-group a:hover {
+    text-decoration: underline;
+}
+
+/* Error message */
+#error-message {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+}
+

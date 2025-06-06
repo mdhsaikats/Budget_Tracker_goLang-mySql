@@ -321,7 +321,7 @@ func resetBudget(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	var err error
-	db, err = sql.Open("mysql", "root:29112003@tcp(localhost:3306)/budget_tacker_db")
+	db, err = sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/budget_tacker_db")
 	if err != nil {
 		panic(err)
 	}

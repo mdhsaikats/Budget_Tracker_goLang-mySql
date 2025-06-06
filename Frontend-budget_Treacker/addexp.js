@@ -6,7 +6,7 @@ document.querySelector("form").addEventListener("submit", async function (e) {
     const user_id = localStorage.getItem("user_id");
 
     if (!expense || !expenseName || !user_id) {
-        alert("Please fill in all fields.");
+        console.log("Please fill in all fields and ensure you are logged in.");
         return;
     }
 

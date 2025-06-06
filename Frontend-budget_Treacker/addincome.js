@@ -5,13 +5,13 @@ document.querySelector("form").addEventListener("submit", async function (e) {
     const user_id = localStorage.getItem("user_id");
 
     if (!user_id) {
-        alert("User not logged in. Please log in first.");
+        console.log("User not logged in. Redirecting to login page.");
         window.location.href = "index.html"; // redirect to login page
         return;
     }
 
     if (!income || isNaN(income) || parseInt(income) <= 0) {
-        alert("Please enter a valid income amount.");
+        console.log("Please enter a valid income amount.");
         return;
     }
 
@@ -23,13 +23,13 @@ document.querySelector("form").addEventListener("submit", async function (e) {
         });
 
         if (res.ok) {
-            alert("Income added successfully.");
+            console.log("Income added successfully.");
             document.getElementById("income").value = ""; // reset the input
         } else {
             const err = await res.text();
-            alert("Failed to add income: " + err);
+            console.error("Failed to add income:", err);
         }
     } catch (error) {
-        alert("Network error: " + error.message);
+        console.error("Error adding income:", error);
     }
 });

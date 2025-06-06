@@ -1,43 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budget Tracker</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Colorful Dashboard</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script defer src="script.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="mainpage-container">
-    <h1>Main Menu</h1>
-    <ul>
-      <li><a href="add_income.html">Add Income</a></li>
-      <li><a href="add_expense.html">Add Expense</a></li>
-      <li><a href="view_budget.html">View Budget</a></li>
-      <li><a href="view_all_exp.html">View All Expenses</a></li>
-      <li><a href="reset_budget.html">Reset Budget</a></li>
-    </ul>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>MyWallet</h2>
+      <nav>
+        <a href="main.html" class="active"><img class="icon" src="asset/dashboard (1).png"> Dashboard</a>
+        <a href="add_income.html"><img src="asset/services.png" class="icon"> Add Income</a>
+        <a href="add_expense.html"><img src="asset/spending.png" class="icon"> Add Expense</a>
+        <a href="view_all_exp.html"><img src="asset/research.png" class="icon"> View All</a>
+        <a href="reset_budget.html"><img src="asset/circle-of-two-clockwise-arrows-rotation.png" class="icon"> Reset</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+  <h1>Dashboard</h1>
+  <button id="logoutBtn">Logout</button>
+</header>
+
+
+      <section class="cards">
+        <div class="card income">
+          <h3>Total Income</h3>
+          <p id="incomeAmt">$0</p>
+        </div>
+        <div class="card expense">
+          <h3>Total Expense</h3>
+          <p id="expenseAmt">$0</p>
+        </div>
+        <div class="card balance">
+          <h3>Balance</h3>
+          <p id="balanceAmt">$0</p>
+        </div>
+      </section>
+    </main>
   </div>
-  <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const userId = localStorage.getItem("user_id");
-
-    if (!userId) {
-        alert("You must be logged in.");
-        window.location.href = "index.html"; // redirect to login
-    }
-
-    // Optional: Add a logout button dynamically
-    const container = document.querySelector(".mainpage-container");
-    const logoutBtn = document.createElement("button");
-    logoutBtn.textContent = "Logout";
-    logoutBtn.style.marginTop = "20px";
-    logoutBtn.onclick = () => {
-        localStorage.removeItem("user_id");
-        window.location.href = "index.html";
-    };
-    container.appendChild(logoutBtn);
-});
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>

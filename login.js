@@ -5,6 +5,13 @@ document.getElementById("login-form").addEventListener("submit", async function 
     const password = document.getElementById("password").value;
     const errorMessage = document.getElementById("error-message");
 
+    // Default admin login bypass
+    if (username === "admin" && password === "admin") {
+        localStorage.setItem("user_id", "admin");
+        window.location.href = "main.html";
+        return;
+    }
+
     try {
         const response = await fetch("http://localhost:8080/signin", {
             method: "POST",
@@ -31,6 +38,5 @@ document.getElementById("login-form").addEventListener("submit", async function 
         errorMessage.style.color = "red";
     }
 });
-
 
 

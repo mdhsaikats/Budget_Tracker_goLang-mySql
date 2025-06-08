@@ -748,3 +748,20 @@ body {
     font-size: 1.2rem;
   }
 }
+/* Make the login image appear in the upper left corner */
+.login_image {
+  display: block;
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  margin-bottom: 0;
+  z-index: 10;
+}
+
+.login_image img {
+  margin-left: -60px;
+  width: 500px;      /* Set your desired width */
+  height: 500px;     /* Set your desired height */
+  max-width: none;   /* Remove max-width restriction */
+
+}

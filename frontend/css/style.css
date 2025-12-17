@@ -1,0 +1,221 @@
+:root {
+	color-scheme: dark;
+	--card-bg: rgba(15, 23, 42, 0.65);
+	--card-border: rgba(148, 163, 184, 0.2);
+	--input-bg: rgba(15, 23, 42, 0.7);
+	--input-border: rgba(226, 232, 240, 0.15);
+	--accent: #facc15;
+}
+
+body {
+	backdrop-filter: blur(20px);
+}
+
+.grid-overlay {
+	position: absolute;
+	inset: 0;
+	background-image: linear-gradient(
+			rgba(255, 255, 255, 0.03) 1px,
+			transparent 1px
+		),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+	background-size: 120px 120px;
+	pointer-events: none;
+}
+
+.orb {
+	position: absolute;
+	width: 28rem;
+	height: 28rem;
+	border-radius: 50%;
+	filter: blur(60px);
+	opacity: 0.35;
+}
+
+.orb-one {
+	background: radial-gradient(circle, #a855f7, transparent 70%);
+	top: -8rem;
+	left: -6rem;
+}
+
+.orb-two {
+	background: radial-gradient(circle, #67e8f9, transparent 70%);
+	bottom: -10rem;
+	right: -4rem;
+}
+
+.card {
+	background: var(--card-bg);
+	border: 1px solid var(--card-border);
+	border-radius: 1.5rem;
+	padding: 1.75rem;
+	box-shadow: 0 25px 60px rgba(2, 6, 23, 0.45);
+	gap: 1rem;
+}
+
+.summary-card {
+	background: linear-gradient(135deg, rgba(103, 232, 249, 0.1), rgba(248, 250, 252, 0.02));
+	border: 1px solid var(--card-border);
+	border-radius: 1.25rem;
+	padding: 1.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.summary-card header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.summary-card .value {
+	font-size: clamp(1.75rem, 5vw, 2.75rem);
+	font-weight: 600;
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	font-size: 0.9rem;
+}
+
+.field span {
+	color: rgba(226, 232, 240, 0.8);
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	font-size: 0.75rem;
+}
+
+.field input {
+	border: 1px solid var(--input-border);
+	background: var(--input-bg);
+	padding: 0.85rem 1rem;
+	border-radius: 0.9rem;
+	color: #f8fafc;
+	font-size: 1rem;
+	transition: border 0.2s ease, transform 0.2s ease;
+}
+
+.field input:focus {
+	outline: none;
+	border-color: rgba(250, 204, 21, 0.7);
+	transform: translateY(-1px);
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-tertiary,
+.btn-outline {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	border-radius: 999px;
+	padding: 0.85rem 1.4rem;
+	font-weight: 600;
+	transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.btn-primary {
+	background: linear-gradient(135deg, #facc15, #f97316);
+	color: #0f172a;
+}
+
+.btn-secondary {
+	background: rgba(103, 232, 249, 0.15);
+	color: #f8fafc;
+}
+
+.btn-tertiary {
+	background: rgba(248, 250, 252, 0.1);
+	color: #f8fafc;
+}
+
+.btn-outline {
+	border: 1px solid rgba(248, 250, 252, 0.4);
+	color: #f8fafc;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-tertiary:hover,
+.btn-outline:hover {
+	transform: translateY(-2px);
+}
+
+.badge {
+	border-radius: 999px;
+	padding: 0.25rem 0.65rem;
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	background: rgba(248, 250, 252, 0.08);
+	border: 1px solid rgba(248, 250, 252, 0.12);
+}
+
+#expense-list li {
+	padding: 1rem 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+#expense-list li span {
+	display: block;
+}
+
+#expense-list li .label {
+	font-weight: 500;
+}
+
+#expense-list li .meta {
+	font-size: 0.8rem;
+	color: rgba(148, 163, 184, 0.8);
+}
+
+.toast {
+	position: fixed;
+	top: 2rem;
+	right: 2rem;
+	min-width: 220px;
+	padding: 1rem 1.4rem;
+	border-radius: 1rem;
+	background: rgba(15, 23, 42, 0.9);
+	border: 1px solid rgba(148, 163, 184, 0.4);
+	color: #f8fafc;
+	font-weight: 500;
+	opacity: 0;
+	transform: translateY(-20px);
+	transition: opacity 0.25s ease, transform 0.25s ease;
+	pointer-events: none;
+}
+
+.toast.show {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.toast.success {
+	border-color: rgba(134, 239, 172, 0.6);
+}
+
+.toast.error {
+	border-color: rgba(248, 113, 113, 0.7);
+}
+
+@media (max-width: 640px) {
+	.card,
+	.summary-card {
+		border-radius: 1rem;
+		padding: 1.25rem;
+	}
+
+	.toast {
+		left: 1rem;
+		right: 1rem;
+		top: 1rem;
+		bottom: auto;
+	}
+}
